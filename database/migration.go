@@ -11,6 +11,13 @@ type User struct {
 	Password []byte // Change the type to []byte for storing hashed password
 }
 
+type File struct {
+	gorm.Model
+	FileName  string
+	Path      string
+	Extension string
+}
+
 func AutoMigrateModels() {
-	DB.AutoMigrate(&User{}) // Update with your model(s)
+	DB.AutoMigrate(&User{}, &File{}) // Update with your model(s)
 }

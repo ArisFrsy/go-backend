@@ -3,25 +3,16 @@ package protected
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
-	"gorm.io/gorm"
 
 	db "github.com/ArisFrsy/go-backend/database"
 )
-
-type User struct {
-	gorm.Model
-	Name     string
-	Username string
-	Email    string
-	Password []byte // Change the type to []byte for storing hashed password
-}
 
 func UsersHandler(c *fiber.Ctx) error {
 	userget := c.Locals("user").(*jwt.Token)
 	claims := userget.Claims.(jwt.MapClaims)
 	name := claims["name"].(string)
 
-	var user User
+	var user db.User
 
 	// Find the user based on username
 	if result := db.DB.Where("name = ?", name).First(&user); result.Error != nil {
@@ -40,7 +31,7 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 	email := c.FormValue("email")
 
 	// Fetch the user from the database
-	var user User
+	var user db.User
 	if err := db.DB.First(&user, id).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
 	}
@@ -66,7 +57,7 @@ func DeleteUserHandler(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	// Fetch the user from the database
-	var user User
+	var user db.User
 	if err := db.DB.First(&user, id).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
 	}

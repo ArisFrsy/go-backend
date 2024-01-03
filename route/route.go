@@ -32,5 +32,8 @@ func FiberHandler() {
 	app.Put("/users", protected.UpdateUserHandler)
 	app.Delete("/users/:id", protected.DeleteUserHandler)
 
+	// Upload File
+	app.Post("/upload", protected.FileUploadHandler)
+
 	app.Listen(":3000")
 }
